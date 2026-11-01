@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="IELTS Academic study planner menuju Overall 6.5.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>IELTS 6.5 — Study Planner</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#182230;--muted:#667085;--line:#e6eaf0;--accent:#315efb;--soft:#edf2ff;--green:#12805c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial}
+header{background:#111827;color:#fff;padding:28px 20px 24px}.wrap{max-width:1100px;margin:auto;padding:0 18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.eyebrow{color:#b8c5ff;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:700}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.15;margin:7px 0}header p{margin:8px 0 0;color:#d0d5dd}
+.pill{display:inline-block;border:1px solid #53617a;border-radius:999px;padding:6px 11px;font-size:12px;color:#e5e7eb}
+main{padding:22px 0 50px}.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px #10182808}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 6px}.muted{color:var(--muted)}.small{font-size:13px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.stat{background:#ffffff12;border:1px solid #ffffff24;border-radius:12px;padding:11px}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:#cbd5e1}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}
+input,select,button{font:inherit}input[type=date],select{padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+button{border:0;border-radius:9px;padding:9px 13px;background:var(--accent);color:#fff;font-weight:650;cursor:pointer}button.secondary{background:#eef1f6;color:#263244}button:hover{filter:brightness(.97)}
+.progress{height:9px;background:#edf0f5;border-radius:20px;overflow:hidden}.progress>div{height:100%;background:var(--green);width:0%;transition:width .2s}
+.task{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:flex-start}.task:last-child{border-bottom:0}.task input{width:18px;height:18px;margin-top:3px;accent-color:var(--green)}.task.done .taskname{text-decoration:line-through;color:#8a94a6}
+.taskname{font-weight:650}.duration{font-size:12px;color:var(--muted);white-space:nowrap;margin-left:auto}.task a,.source a{color:#315efb;text-decoration:none}.task a:hover,.source a:hover{text-decoration:underline}
+.source{padding:10px 0;border-bottom:1px solid var(--line)}.source:last-child{border:0}.source b{display:block}.source span{display:block;color:var(--muted);font-size:13px}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.day{border:1px solid var(--line);border-radius:10px;padding:9px 5px;text-align:center;background:#fff;cursor:pointer}.day.active{border-color:var(--accent);background:var(--soft)}.day strong{display:block;font-size:12px}.day span{font-size:11px;color:var(--muted)}
+.monthlist{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.month{border:1px solid var(--line);border-radius:11px;padding:11px}.month b{display:block}.month small{color:var(--muted)}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:20px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.stats{grid-template-columns:1fr 1fr}.monthlist{grid-template-columns:1fr}.duration{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top"><div><div class="eyebrow">Personal study planner</div><h1>IELTS Academic 6.5</h1><p>Program belajar gratis · 2 November 2026 – 30 Juni 2027</p></div><span class="pill">90 menit / hari · 6 hari + review</span></div>
+  <div class="stats">
+    <div class="stat"><b>6.5</b><span>Target overall</span></div>
+    <div class="stat"><b>8 bulan</b><span>Durasi program</span></div>
+    <div class="stat"><b>1–2 jam</b><span>Waktu belajar harian</span></div>
+  </div>
+</div></header>
+<main class="wrap">
+  <div class="grid">
+    <section class="card">
+      <h2>Jadwal belajar harian</h2>
+      <p class="muted small">Pilih tanggal untuk melihat tugas hari itu. Centang tugas setelah selesai; progres tersimpan di browser/perangkat ini.</p>
+      <div class="controls"><input id="datePicker" type="date" min="2026-11-02" max="2027-06-30"><button id="todayBtn" class="secondary">Ke tanggal program</button></div>
+      <div class="weekdays" id="weekdays"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:18px 0 8px"><div><div class="muted small" id="dateLabel">Tanggal</div><h2 id="dayTitle" style="margin:2px 0">Tugas hari ini</h2></div><span class="pill" id="totalTime" style="color:#344054;border-color:#e6eaf0">90 menit</span></div>
+      <div class="progress"><div id="progressBar"></div></div><p class="small muted" id="progressText">0% selesai</p>
+      <div id="tasks"></div>
+    </section>
+    <aside>
+      <section class="card" style="margin-bottom:16px">
+        <h2>Target skor latihan</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><span class="muted small">Listening</span><h2>7.0</h2></div><div><span class="muted small">Reading</span><h2>7.0</h2></div>
+          <div><span class="muted small">Writing</span><h2>6.0</h2></div><div><span class="muted small">Speaking</span><h2>6.0</h2></div>
+        </div><p class="muted small">Target latihan indikatif. Periksa persyaratan minimum tiap komponen pada universitas tujuan.</p>
+      </section>
+      <section class="card" style="margin-bottom:16px">
+        <h2>Sumber belajar gratis</h2>
+        <div class="source"><b>IELTS.org — contoh soal resmi</b><span>Sample questions Academic empat skill.</span><a target="_blank" rel="noopener" href="https://ielts.org/take-a-test/preparation-resources/sample-test-questions/academic-test">Buka sumber ↗</a></div>
+        <div class="source"><b>British Council — IELTS practice</b><span>Latihan dan familiarisasi format tes.</span><a target="_blank" rel="noopener" href="https://takeielts.britishcouncil.org/prepare/ielts-free-practice-mock-tests/academic">Buka sumber ↗</a></div>
+        <div class="source"><b>British Council LearnEnglish</b><span>Grammar, vocabulary, listening, reading.</span><a target="_blank" rel="noopener" href="https://learnenglish.britishcouncil.org/">Buka sumber ↗</a></div>
+        <div class="source"><b>BBC Learning English</b><span>Pronunciation, vocabulary, listening.</span><a target="_blank" rel="noopener" href="https://www.bbc.co.uk/learningenglish">Buka sumber ↗</a></div>
+        <div class="source"><b>VOA Learning English</b><span>Audio dan teks untuk latihan listening.</span><a target="_blank" rel="noopener" href="https://learningenglish.voanews.com/">Buka sumber ↗</a></div>
+        <div class="source"><b>ESL-Lab</b><span>Listening practice berdasarkan level.</span><a target="_blank" rel="noopener" href="https://www.esl-lab.com/">Buka sumber ↗</a></div>
+        <div class="source"><b>IELTS Liz</b><span>Strategi dan contoh Writing/Speaking.</span><a target="_blank" rel="noopener" href="https://ieltsliz.com/">Buka sumber ↗</a></div>
+        <div class="source"><b>IDP IELTS</b><span>Contoh soal dan panduan persiapan.</span><a target="_blank" rel="noopener" href="https://ielts.idp.com/indonesia/prepare/ielts-sample-test/en-gb">Buka sumber ↗</a></div>
+      </section>
+    </aside>
+  </div>
+  <section class="card" style="margin-top:16px">
+    <h2>Roadmap bulanan</h2><div class="monthlist" id="months"></div>
+  </section>
+  <section class="card" style="margin-top:16px">
+    <h2>Pengingat belajar</h2>
+    <p class="muted small">Atur pengingat harian. Notifikasi browser membutuhkan izin. Pengingat lokal akan diperiksa saat aplikasi dibuka; notifikasi pada jam tertentu paling andal ketika aplikasi/browser masih aktif.</p>
+    <div class="controls">
+      <label class="small">Jam pengingat <input id="reminderTime" type="time" value="19:00"></label>
+      <button id="enableReminder">Aktifkan notifikasi</button>
+      <button id="testReminder" class="secondary">Tes notifikasi</button>
+    </div>
+    <p class="small muted" id="reminderStatus">Pengingat belum diaktifkan.</p>
+    <p class="small muted" id="installStatus">Untuk memasang: gunakan menu browser “Install app” atau “Add to Home Screen”.</p>
+  </section>
+  <section class="card" style="margin-top:16px">
+    <h2>Evaluasi bulanan</h2>
+    <p class="muted small">Isi hasil latihan di akhir bulan. Catat skor Listening/Reading dari 40 soal dan penilaian perkiraan Writing/Speaking. Data disimpan di browser.</p>
+    <div class="controls"><select id="evalMonth"></select><input id="listenScore" type="number" min="0" max="40" placeholder="Listening /40" style="width:125px"><input id="readScore" type="number" min="0" max="40" placeholder="Reading /40" style="width:125px"><input id="writeScore" type="text" placeholder="Writing band" style="width:115px"><input id="speakScore" type="text" placeholder="Speaking band" style="width:115px"><button id="saveEval">Simpan evaluasi</button></div>
+    <p class="small muted" id="evalStatus">Belum ada evaluasi tersimpan.</p>
+  </section>
+  <footer>Planner berjalan secara lokal di browser. Centang tugas dan evaluasi tersimpan di perangkat ini, bukan tersinkron otomatis antarperangkat.</footer>
+</main>
+<script>
+const start = new Date('2026-11-02T12:00:00'), end = new Date('2027-06-30T12:00:00');
+const months = [
+['November 2026','Fondasi grammar, vocabulary, listening dasar, dan diagnostic test.','Baseline: kerjakan satu latihan awal untuk setiap skill.'],
+['Desember 2026','Perkuat kalimat, paragraf, pronunciation, skimming dan scanning.','Evaluasi grammar, vocabulary, dan pemahaman audio.'],
+['Januari 2027','Kenali format IELTS; mulai latihan tipe soal Listening dan Reading.','Mini test per skill; target latihan awal sekitar 4.5–5.0.'],
+['Februari 2027','Latihan empat skill dengan timer; Task 1 dan Task 2 dasar.','Half mock test; target indikatif 5.0–5.5.'],
+['Maret 2027','Strategi soal, pengembangan jawaban Speaking, dan essay terstruktur.','Full mock; target indikatif 5.5–6.0.'],
+['April 2027','Tingkatkan akurasi, manajemen waktu, dan revisi tulisan.','Dua full mock; usahakan mendekati band 6.0.'],
+['Mei 2027','Simulasi penuh mingguan dan perbaikan kelemahan utama.','Satu full mock per minggu; target 6.0–6.5.'],
+['Juni 2027','Final review, simulasi, istirahat cukup, dan persiapan tes.','Dua simulasi stabil di 6.5 sebelum tes jika memungkinkan.']
+];
+const weekly = [
+{day:'Senin',title:'Grammar + Vocabulary',tasks:[['Grammar lesson',20,'https://learnenglish.britishcouncil.org/grammar'],['Vocabulary: 10–15 kata dan collocations',20,'https://www.bbc.co.uk/learningenglish'],['Buat 5–8 kalimat / satu paragraf',30,''],['Review kesalahan dan flashcards',20,'']]},
+{day:'Selasa',title:'Listening',tasks:[['Pemanasan: prediksi topik dan keywords',10,'https://learningenglish.voanews.com/'],['Latihan audio / IELTS Listening',30,'https://ielts.org/take-a-test/preparation-resources/sample-test-questions/academic-test'],['Cek jawaban dan transcript',25,''],['Dengarkan ulang dan catat kesalahan',25,'https://www.esl-lab.com/'] ]},
+{day:'Rabu',title:'Reading',tasks:[['Baca artikel pendek',20,'https://www.nationalgeographic.com/'],['Latihan tipe soal IELTS Reading',35,'https://ielts.org/take-a-test/preparation-resources/sample-test-questions/academic-test'],['Review jawaban dan bukti di teks',25,''],['Catat vocabulary dalam konteks',10,'https://www.bbc.co.uk/learningenglish']]},
+{day:'Kamis',title:'Speaking',tasks:[['Pronunciation / shadowing',15,'https://www.bbc.co.uk/learningenglish'],['Speaking Part 1: jawab 5 pertanyaan',20,''],['Speaking Part 2: cue card, rekam 2 menit',25,''],['Speaking Part 3: alasan dan contoh',20,''],['Dengarkan rekaman dan evaluasi',10,'']]},
+{day:'Jumat',title:'Writing',tasks:[['Pelajari struktur / kriteria penilaian',15,'https://ieltsliz.com/'],['Menulis Task 1 atau Task 2',35,'https://ielts.org/take-a-test/preparation-resources/sample-test-questions/academic-test'],['Revisi struktur, grammar, vocabulary',25,''],['Catat 3 kesalahan berulang',15,'']]},
+{day:'Sabtu',title:'Integrated Practice',tasks:[['Listening mini practice',20,'https://takeielts.britishcouncil.org/prepare/ielts-free-practice-mock-tests/academic'],['Reading timed practice',25,'https://ielts.idp.com/indonesia/prepare/ielts-sample-test/en-gb'],['Writing atau Speaking bergantian',30,'https://ieltsliz.com/'],['Review dan error log',15,'']]},
+{day:'Minggu',title:'Review ringan / Rest',tasks:[['Review vocabulary mingguan',15,'https://www.bbc.co.uk/learningenglish'],['Baca ulang error log',15,''],['Speaking santai atau listening ringan (opsional)',15,'https://learningenglish.voanews.com/']]}
+];
+const monthSpecific = [
+'Fondasi: simple present/past, future, subject-verb agreement, articles, prepositions, daily vocabulary.',
+'Fondasi lanjut: present perfect, complex sentences, relative clauses, passive voice, paragraf.',
+'IELTS foundation: Section 1–2, question types, skimming, scanning, Speaking Part 1–2.',
+'IELTS foundation: Listening Sections 1–4, Reading question types, Academic Task 1, essay structure.',
+'Score building: paraphrasing, inference, timed Reading, Speaking Part 3, Task 2 essay types.',
+'Score building: coherence, lexical resource, grammar accuracy, full timed sections.',
+'Exam practice: full mocks, error analysis, writing feedback, speaking fluency.',
+'Final preparation: full mocks, targeted correction, test-day routine and recovery.'
+];
+const datePicker=document.getElementById('datePicker'), tasksEl=document.getElementById('tasks');
+const pad=n=>String(n).padStart(2,'0'), keyDate=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const load=(k,def={})=>{try{return JSON.parse(localStorage.getItem(k))||def}catch{return def}};
+let selected = new Date(start);
+function monthIndex(d){return Math.max(0,Math.min(7,(d.getFullYear()-2026)*12+d.getMonth()-10))}
+function getTasks(d){
+ const idx=monthIndex(d), dow=(d.getDay()+6)%7, base=weekly[dow];
+ let items=base.tasks.map((t,i)=>({name:t[0],mins:t[1],url:t[2]}));
+ if(dow===6) items=items.slice(0,2); // Sunday is lighter
+ if(dow===5 && d.getDate()>21) items=[{name:'Monthly mini/full mock test',mins:60,url:'https://takeielts.britishcouncil.org/prepare/ielts-free-practice-mock-tests/academic'},{name:'Review skor dan error log',mins:30,url:''}];
+ const extra=monthSpecific[idx];
+ if(dow===0) items[0].name += ` — ${extra}`;
+ if(idx>=4 && dow===5 && d.getDate()<=21) items[0].name='Timed practice: '+items[0].name;
+ return {base,items};
+}
+function render(){
+ const d=selected, k=keyDate(d), dow=(d.getDay()+6)%7, {base,items}=getTasks(d), saved=load('ielts-done',{});
+ datePicker.value=k;
+ document.getElementById('dateLabel').textContent=d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ document.getElementById('dayTitle').textContent=base.title;
+ document.getElementById('totalTime').textContent=items.reduce((s,x)=>s+x.mins,0)+' menit';
+ document.getElementById('weekdays').innerHTML=Array.from({length:7},(_,i)=>{let x=new Date(d);x.setDate(d.getDate()-dow+i);return `<div class="day ${i===dow?'active':''}" data-date="${keyDate(x)}"><strong>${['Sen','Sel','Rab','Kam','Jum','Sab','Min'][i]}</strong><span>${x.getDate()}</span></div>`}).join('');
+ document.querySelectorAll('.day').forEach(el=>el.onclick=()=>{selected=new Date(el.dataset.date+'T12:00:00');render()});
+ tasksEl.innerHTML=items.map((t,i)=>{let id=k+'-'+i,done=!!saved[id];return `<div class="task ${done?'done':''}"><input type="checkbox" data-id="${id}" ${done?'checked':''}><div style="flex:1"><div class="taskname">${t.name}</div>${t.url?`<a class="small" href="${t.url}" target="_blank" rel="noopener">Buka materi / latihan ↗</a>`:'<span class="small muted">Latihan mandiri dan review</span>'}</div><span class="duration">${t.mins} mnt</span></div>`}).join('');
+ tasksEl.querySelectorAll('input').forEach(el=>el.onchange=()=>{let s=load('ielts-done',{});s[el.dataset.id]=el.checked;localStorage.setItem('ielts-done',JSON.stringify(s));render()});
+ let count=items.filter((_,i)=>saved[k+'-'+i]).length, pct=Math.round(count/items.length*100);
+ document.getElementById('progressBar').style.width=pct+'%';document.getElementById('progressText').textContent=`${count}/${items.length} tugas selesai · ${pct}%`;
+}
+datePicker.addEventListener('change',()=>{selected=new Date(datePicker.value+'T12:00:00');render()});
+document.getElementById('todayBtn').onclick=()=>{selected=new Date(start);render()};
+document.getElementById('months').innerHTML=months.map((m,i)=>`<div class="month"><b>${m[0]}</b><small>${m[1]}</small><p class="small">${m[2]}</p><p class="small muted">${monthSpecific[i]}</p></div>`).join('');
+const em=document.getElementById('evalMonth');months.forEach((m,i)=>{let o=document.createElement('option');o.value=i;o.textContent=m[0];em.appendChild(o)});
+function showEval(){let e=load('ielts-eval',{})[em.value];document.getElementById('listenScore').value=e?.l??'';document.getElementById('readScore').value=e?.r??'';document.getElementById('writeScore').value=e?.w??'';document.getElementById('speakScore').value=e?.s??'';document.getElementById('evalStatus').textContent=e?'Evaluasi bulan ini tersimpan.':'Belum ada evaluasi untuk bulan ini.'}
+em.onchange=showEval;document.getElementById('saveEval').onclick=()=>{let a=load('ielts-eval',{});a[em.value]={l:document.getElementById('listenScore').value,r:document.getElementById('readScore').value,w:document.getElementById('writeScore').value,s:document.getElementById('speakScore').value};localStorage.setItem('ielts-eval',JSON.stringify(a));showEval();document.getElementById('evalStatus').textContent='Evaluasi berhasil disimpan di browser.'};
+render();showEval();
+</script>
+
+<script>
+const REMINDER_KEY='ielts-reminder-settings-v1';
+let reminderTimer=null;
+function reminderSettings(){try{return JSON.parse(localStorage.getItem(REMINDER_KEY))||{enabled:false,time:'19:00'}}catch(e){return {enabled:false,time:'19:00'}}}
+function updateReminderStatus(){
+ const s=reminderSettings(), el=document.getElementById('reminderStatus');
+ if(!el)return;
+ if(!('Notification' in window)){el.textContent='Browser ini tidak mendukung Web Notifications.';return;}
+ el.textContent=s.enabled ? `Pengingat aktif setiap hari pukul ${s.time}. Pemeriksaan berjalan saat planner dibuka/aktif.` : 'Pengingat belum diaktifkan.';
+}
+async function askReminderPermission(){
+ if(!('Notification' in window)){alert('Browser ini tidak mendukung notifikasi.');return false;}
+ const p=await Notification.requestPermission();
+ if(p!=='granted'){alert('Izin notifikasi belum diberikan. Periksa pengaturan notifikasi browser/HP.');return false;}
+ return true;
+}
+async function showStudyNotification(title,body){
+ if(!('Notification' in window) || Notification.permission!=='granted')return;
+ const reg=await navigator.serviceWorker?.getRegistration();
+ if(reg && reg.showNotification){await reg.showNotification(title,{body,icon:'./icons/icon-192.png',badge:'./icons/icon-192.png',tag:'ielts-daily-reminder'});}
+ else new Notification(title,{body,icon:'./icons/icon-192.png'});
+}
+function scheduleReminderCheck(){
+ if(reminderTimer)clearInterval(reminderTimer);
+ const check=()=>{
+  const s=reminderSettings(); if(!s.enabled || Notification.permission!=='granted')return;
+  const now=new Date(), [hh,mm]=s.time.split(':').map(Number);
+  const stamp=now.toISOString().slice(0,10);
+  const last=localStorage.getItem('ielts-reminder-last');
+  if(now.getHours()===hh && now.getMinutes()===mm && last!==stamp){
+    localStorage.setItem('ielts-reminder-last',stamp);
+    showStudyNotification('Waktunya belajar IELTS 📚','Buka IELTS Planner dan selesaikan sesi belajar hari ini.');
+  }
+ };
+ check(); reminderTimer=setInterval(check,30000);
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ const s=reminderSettings();
+ const time=document.getElementById('reminderTime'); if(time)time.value=s.time;
+ document.getElementById('enableReminder')?.addEventListener('click',async()=>{
+   const ok=await askReminderPermission(); if(!ok)return;
+   localStorage.setItem(REMINDER_KEY,JSON.stringify({enabled:true,time:time.value||'19:00'}));
+   updateReminderStatus();scheduleReminderCheck();
+ });
+ time?.addEventListener('change',()=>{
+   const old=reminderSettings();localStorage.setItem(REMINDER_KEY,JSON.stringify({...old,time:time.value||'19:00'}));
+   updateReminderStatus();
+ });
+ document.getElementById('testReminder')?.addEventListener('click',async()=>{
+   if(Notification.permission!=='granted'){const ok=await askReminderPermission();if(!ok)return;}
+   await showStudyNotification('Tes IELTS Planner','Notifikasi berhasil ditampilkan. Semangat belajar!');
+ });
+ updateReminderStatus();scheduleReminderCheck();
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)scheduleReminderCheck();});
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(err=>console.warn('SW registration failed',err)));
+}
+</script>
+
+</body></html>
